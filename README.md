@@ -1,5 +1,7 @@
 # README
 
+Check the `app/services` folder for the business logic.
+
 **Creating a basket**
 
 Specify the delivery provider and the list of offer codes when creating a basket. But you can add offers later also. 
