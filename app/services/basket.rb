@@ -3,23 +3,34 @@
 class Basket
   class Error < StandardError; end
 
-  def initialize(delivery_rules:, offers:)
-    @delivery_rules = delivery_rules
+  # @param delivery_provider [String, nil] 'pickup' | 'default'
+  def initialize(delivery_provider: nil, offers: nil)
+    @delivery_provider = delivery_provider
     @offers = offers
 
     @products = []
   end
 
-  attr_reader :delivery_rules, :offers, :products
+  attr_reader :delivery_provider, :offers, :products
 
   def add(code)
     product = Product.find_by(code:)
     raise Error, "Product not found" unless product
 
-    @products << product.code
+    @products << product
+  end
+
+  def subtotal
+    products.sum(:price)
   end
 
   def total
-    # Return total price of basket
+    subtotal + delivery_cost
+  end
+
+  private
+
+  def delivery_cost
+    Delivery.new(basket: self, provider: delivery_provider).calculate
   end
 end
