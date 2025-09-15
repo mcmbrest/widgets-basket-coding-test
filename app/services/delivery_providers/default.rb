@@ -2,7 +2,7 @@
 
 class DeliveryProviders::Default < DeliveryProviders::Base
   def calculate
-    case basket.subtotal
+    case basket.items.sum(&:basket_amount)
     when 0...50
       4.95
     when 50...90
